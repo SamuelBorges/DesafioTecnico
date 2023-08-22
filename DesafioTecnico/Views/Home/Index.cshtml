@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div class="text-center">
+    <h1><span>Tabela de Precos</span></h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="text-center">
+                    Período Vigente<br>
+                </th>
+                <th class="text-center">
+                    Valor Inicial
+                </th>
+                <th class="text-center">
+                    Valor Adicional<br>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr style="background-color:LightGreen">
+                <td>@((ViewBag.PrecoVigente.DataVigenciaInicial).ToString("dd-MMM-yyyy")) - @((ViewBag.PrecoVigente.DataVigenciaFinal).ToString("dd-MMM-yyyy"))</td>
+                <td>@((@ViewBag.PrecoVigente.ValorInicial).ToString("00.00"))</td>
+                <td>@((@ViewBag.PrecoVigente.ValorAdicional).ToString("00.00"))</td>
+            </tr>
+        </tbody>            
+        @foreach (TabelaPreco tabela in ViewBag.PrecosFuturos)
+        {
+            <tr>
+                <td>@(tabela.DataVigenciaInicial.ToString("dd-MMM-yyyy")) - @(tabela.DataVigenciaFinal.ToString("dd-MMM-yyyy"))</td>
+                <td>@((@tabela.ValorInicial).ToString("00.00"))</td>
+                <td>@((@tabela.ValorAdicional).ToString("00.00"))</td>
+            </tr>
+        }
+    </table>
+</div>

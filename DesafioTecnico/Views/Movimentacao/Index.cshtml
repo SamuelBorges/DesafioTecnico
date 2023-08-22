@@ -1,0 +1,105 @@
+﻿@{
+    Layout = "_Layout";
+}
+@Html.ValidationMessage("CustomError")
+<div class="modal fade" id="modalCadastroEntrada" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="tituloModal">INFORME A PLACA DO VEÍCULO</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEnviarPlaca" asp-controller="Movimentacao" asp-action="RegistrarEntrada" method="post">
+            <div class="modal-body">
+                    <input type="text" class="form-control text-center" id="inputPlaca" name="inputPlaca" placeholder="BRA1324" maxlength="7" required>
+            
+            <div class="text-center">
+                <br />
+                <button type="submit" class="btn btn-success" >REALIZAR ENTRADA</button>
+            </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalCadastroSaida" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="tituloModal">INFORME A PLACA DO VEÍCULO</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEnviarPlaca" asp-controller="Movimentacao" asp-action="RegistrarSaida" method="post">
+                <div class="modal-body">
+                    <input type="text" class="form-control text-center" id="inputPlaca" name="inputPlaca" placeholder="BRA1324" maxlength="7" required>
+
+                    <div class="text-center">
+                        <br />
+                        <button type="submit" class="btn btn-danger">REALIZAR SAIDA</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroEntrada">
+    NOVA ENTRADA
+</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroSaida">
+    NOVA SAIDA
+    </button>
+</div>
+@if (ViewBag.MovimentacaoVeiculo.Count != 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Placa</th>
+                <th>Data Entrada</th>
+                <th>Data Saída</th>
+                <th>Preço Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registroMovimentacao in ViewBag.MovimentacaoVeiculo)
+            {
+                @if (registroMovimentacao.DataSaida != null)
+                {
+                    <tr>
+                        <th>@registroMovimentacao.Placa</th>
+                        <td>@registroMovimentacao.DataEntrada</td>
+                        <td>@registroMovimentacao.DataSaida</td>
+                        <td>@registroMovimentacao.PrecoTotal</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <th>@registroMovimentacao.Placa</th>
+                        <td>@registroMovimentacao.DataEntrada</td>
+                        <td style="background-color:lightyellow" align="right">SAÍDA EM ABERTO</td>
+                        <td style="background-color:lightyellow"></td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+    </table>
+    <div class="alert alert-danger align-self-xl-center" role="alert">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@section scripts{
+    <script type="text/javascript">
+        const myModal = document.getElementById('modalCadastro')
+        const myInput = document.getElementById('myInput')
+
+        myModal.addEventListener('shown.bs.modal', () => {
+            myInput.focus()
+        })
+    </script>
+}
