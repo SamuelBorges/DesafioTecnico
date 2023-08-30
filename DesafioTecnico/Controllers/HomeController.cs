@@ -18,7 +18,6 @@ namespace DesafioTecnico.Controllers
 
         public ActionResult Index()
         {
-            DateTime dataAtual = DateTime.Now;
             ViewBag.PrecoVigente = _tabelaPrecoService.ListarPrecosVigentes();
             ViewBag.PrecosFuturos = _tabelaPrecoService.ListarPrecosFuturos();
 

@@ -6,7 +6,7 @@ namespace DesafioTecnico.Services
     {
         List<RegistroMovimento> RecuperarMovimentacoes();
         void RegistrarMovimentoEntrada(RegistroMovimento novoRegistro);
-        bool isVeiculoEstacionado(string placaVeiculo);
+        bool isSaidaPendente(string placaVeiculo);
         TabelaPreco? ListarPrecosVigentes();
         void RegistrarMovimentoSaida(RegistroMovimento registroMovimento, double precoTota);
         RegistroMovimento? RecuperarMovimentoEntrada(string inputPlaca);

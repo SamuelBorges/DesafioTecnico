@@ -24,17 +24,26 @@ namespace DesafioTecnico.Services
         public double CalcularPrecoTotal(TabelaPreco precoVigente, RegistroMovimento registroMovimento)
         {
             TimeSpan tempoPermanencia = (TimeSpan)(registroMovimento.DataSaida - registroMovimento.DataEntrada);
+            double valorFinal = precoVigente.ValorInicial;
 
             if (tempoPermanencia.TotalMinutes <= 30)
             {
-                return precoVigente.ValorInicial / 2;
+                return valorFinal / 2;
+            }else if (tempoPermanencia.TotalMinutes <= 70)
+            {
+                return valorFinal;
+            }
+            tempoPermanencia -= TimeSpan.FromMinutes(60);
+
+            double minutosArredondados = Math.Floor(tempoPermanencia.TotalMinutes / 60);
+            valorFinal += minutosArredondados * precoVigente.ValorAdicional;
+
+            if (tempoPermanencia.Minutes > 10)
+            {
+                valorFinal += precoVigente.ValorAdicional;
             }
 
-            int horasTotais = (int)Math.Ceiling(tempoPermanencia.TotalHours);
-            int numeroTolerancias = (horasTotais / 1) - 1; 
-            double precoTotal = precoVigente.ValorInicial + (numeroTolerancias * precoVigente.ValorAdicional);
-
-            return Math.Round(precoTotal, 2);
+            return valorFinal;
         }
         public void RegistrarMovimentoSaida(RegistroMovimento registroMovimento, double precoTotal)
         {
@@ -49,7 +58,7 @@ namespace DesafioTecnico.Services
                         .FirstOrDefault();
             return movimento;
         }
-        public bool isVeiculoEstacionado(string placa)
+        public bool isSaidaPendente(string placa)
         {
             RegistroMovimento? movimento = _context.RegistroMovimento.FirstOrDefault(r => r.Placa == placa && r.DataSaida == null);
             return movimento != null;

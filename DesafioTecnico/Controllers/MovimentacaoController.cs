@@ -28,7 +28,7 @@ namespace DesafioTecnico.Controllers
                 SetViewBags("Placa invalida!");
                 return View("Index");
             }
-            if (_movimentacaoPrecoService.isVeiculoEstacionado(inputPlaca))
+            if (_movimentacaoPrecoService.isSaidaPendente(inputPlaca))
             {
                 SetViewBags("Registro de saída pendente para o veículo " + inputPlaca);
                 return View("Index");
@@ -47,16 +47,15 @@ namespace DesafioTecnico.Controllers
                 return View("Index");
             }
             TabelaPreco? precoVigente = _movimentacaoPrecoService.ListarPrecosVigentes();
-            RegistroMovimento? registroEntrada = _movimentacaoPrecoService.RecuperarMovimentoEntrada(inputPlaca);
-
-            if (registroEntrada == null)
-            {
-                SetViewBags("Este veículo nao esta registrado");
-                return View("Index");
-            }
             if (precoVigente == null)
             {
                 SetViewBags("Voce precisa ter um preco vigente!");
+                return View("Index");
+            }
+            RegistroMovimento? registroEntrada = _movimentacaoPrecoService.RecuperarMovimentoEntrada(inputPlaca);
+            if (registroEntrada == null)
+            {
+                SetViewBags("Este veículo nao esta registrado");
                 return View("Index");
             }
 
@@ -74,7 +73,7 @@ namespace DesafioTecnico.Controllers
             Regex regex = new Regex($"^[a-zA-Z]{{3}}[0-9][A-Za-z0-9][0-9]{{2}}$");
             Match regexResult = regex.Match(inputPlaca);
 
-            if (string.IsNullOrEmpty(inputPlaca) || inputPlaca.Length > 7 || !regexResult.Success)
+            if (string.IsNullOrEmpty(inputPlaca) || !regexResult.Success || inputPlaca.Length > 7)
             {
                 ModelState.AddModelError("placa", "Valor Inválido");
                 return false;
